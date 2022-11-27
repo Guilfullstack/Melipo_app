@@ -15,4 +15,4 @@ producao(que zera a producao de todos os enxames).
 
 6-Relarorios: Se refere a fucoes relacionadas a relatorios podendo criar,exibir e excluir relatorios de enxames especies ou producao; 
 
-@@@@Bem aproveitem para testar o codigo me digam o que acharam e como posso melhorar Valeu! :)
+@@@@Bem aproveitem para testar o codigo, me digam o que acharam e como posso melhorar Valeu! :)
