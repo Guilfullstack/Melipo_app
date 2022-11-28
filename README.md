@@ -7,7 +7,7 @@ Esse projeto surgiu de um hobie que tenho que é criar abelhas nativas, como est
 
 2-Enxame: Se refere a fucoes relacionadas ao enxame como cadastrar excluir, alterar e exibir tambem é possivel ver uma relação de todos os enxames cadastrados.
 
-3-Especie: Se refere a fucoes relacionadas a especie como cadastrar excluir, alterar e exibir a relação de todas as especies cadastradas.
+3-Especie: Se refere a fucoes relacionadas a especie como cadastrar excluir, alterar, exibir a relação de todas as especies cadastradas e resetar( o que faz elas voltarem ao modo padrao).
 
 4-Tarefas: Se refere a fucoes relacionadas a tarefas como criar excluir e exibir tarefas.
 
