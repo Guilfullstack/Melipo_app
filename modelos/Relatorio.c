@@ -299,46 +299,54 @@ void excluir_relatorio(char op,int cod){//exclui um relatorio
 }
 // operacoes em Arquivos
 void salvar_arquivo(char nomearq[20],char op,char diretorio[61]){//salva o nome de um relatorio em um arquivo quando é gerado se for gerado com o mesmo nome não acrecentara a mais
-    //acessar_bd_Arquivo(op);
-
+    int igual=0;
+    int cod=0;
+    int cont=0;
     for(int i=0;i<quantidade;i++){
-        if(strcmp(Relat[i].nome,nomearq)!=0){
-            if(Relat[i].cod==0){
-                strcpy(Relat[i].nome,nomearq);
-                strcpy(Relat[i].diretorio,diretorio);
-                Relat[i].cod=i+1;
-                break;
-            }
-        }else{
-            break;
+       Relat[i].cod=0;
+       Relat[i].nome[0]=NULL;
+    }
+    acessar_bd_Arquivo(op);
+    for(int i=0;i<quantidade;i++){
+        if(Relat[i].cod!=0){
+            cont++;
         }
     }
+    for(int i=0;i<quantidade;i++){
+        if(strcmp(Relat[i].nome,nomearq)==0){
+                igual=1;
+                break;
 
+        }
+    }
+    cod=cont+1;
+    if(igual==0){
+        char diretorioA[61];
+        strcpy(diretorioA,diretorio4);
+        if(op=='p')strcat(diretorioA,"Producao");
+        if(op=='x')strcat(diretorioA,"Enxame");
+        if(op=='e')strcat(diretorioA,"Especie");
+        fparq=fopen(diretorioA,"a");
+        if(fparq==NULL){
+            printf("\nFalha ao abrir arquivo");
+            fclose(fparq);
+            exit(1);
+        }else{
+            //abrindo e adicionando no arquivo
+            fprintf(fparq,"%d NOME: %s    %s\n",cod,nomearq,diretorio);
+            fflush(fparq);
+            fclose(fparq);
+        }
+    }
+    acessar_bd_Arquivo(op);
     atualizar_arquivo(op);
-    /*char diretorioA[61];
-    strcpy(diretorioA,diretorio4);
-    if(op=='p')strcat(diretorioA,"Producao");
-    if(op=='x')strcat(diretorioA,"Enxame");
-    if(op=='e')strcat(diretorioA,"Especie");
-
-    fparq=fopen(diretorioA,"a");
-    if(fparq==NULL){
-        printf("\nFalha ao abrir arquivo");
-        fclose(fparq);
-        exit(1);
-    }else{
-        //abrindo e adicionando no arquivo
-        fprintf(fparq,"NOME: %s    %s\n",nomearq,diretorio);
-        fflush(fparq);
-        fclose(fparq);
-    }*/
 
 }
 int exibir_arquivos(char op){//exibe o nome e codigo dos relatorios na variavel
     int t=0;
     acessar_bd_Arquivo(op);
     for(int i=0;i<quantidade;i++){
-        if(Relat[i].nome[0]!=NULL&Relat[i].cod!=0){
+        if(Relat[i].cod!=0){
             printf("Cod:%d  Nome:%s  Diretorio:%s\n---------------------------------\n",Relat[i].cod,Relat[i].nome,Relat[i].diretorio);
             t++;
         }
@@ -367,7 +375,7 @@ void ler_arquivo(char op){//ler arquivo que contem o nome dos diretorios
     }else{
         while(!feof(fparq)){
             fscanf(fparq,"%d %s %s %s\n",&cod,&texto,&nomearq,&diretorioR);
-            if(cod!=0&texto[0]!=NULL&nomearq[0]!=NULL){
+            if(cod!=0){
                 printf("\n%s\n[%d]  %s %s   %s\n%s",lin2,cod,texto,nomearq,diretorioR,lin2);
                 tr++;
             }else{
@@ -406,11 +414,11 @@ void acessar_bd_Arquivo(char op){//acessa o banco de dados do arquivo e manda da
         //abrindo e adicionando no arquivo
         for(int i=0;!feof(fparq);i++){
             fscanf(fparq,"%d %s %s %s\n",&cod,&texto,&nomearq,&diretorioR);
-            if(&nomearq[0]!=NULL&cod!=0){
+            //if(nomearq[0]!=NULL&cod!=0){
                 strcpy(Relat[i].nome,nomearq);
                 strcpy(Relat[i].diretorio,diretorioR);
-                Relat[i].cod=cod;
-            }
+                Relat[i].cod=i+1;
+           //}
             cod=0;
             nomearq[0]=NULL;
         }
@@ -420,6 +428,7 @@ void acessar_bd_Arquivo(char op){//acessa o banco de dados do arquivo e manda da
 void atualizar_arquivo(char op){//Envia os dados da variavel de relatorios para o arquivo
     char diretorio[61];
     strcpy(diretorio,diretorio4);
+    int a=0;
     if(op=='p')strcat(diretorio,"Producao");
     if(op=='x')strcat(diretorio,"Enxame");
     if(op=='e')strcat(diretorio,"Especie");
@@ -430,8 +439,10 @@ void atualizar_arquivo(char op){//Envia os dados da variavel de relatorios para 
     }else{
         //abrindo e adicionando no arquivo
         for(int i=0;i<quantidade;i++){
+
             if(Relat[i].cod!=0){
-                fprintf(fparq,"%d NOME: %s    %s\n",i+1,Relat[i].nome,Relat[i].diretorio);
+                a++;
+                fprintf(fparq,"%d NOME: %s    %s\n",a,Relat[i].nome,Relat[i].diretorio);
             }
         }
         fflush(fparq);
