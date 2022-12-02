@@ -47,10 +47,10 @@ void delay(char del[21],int p){// delay a etapas de processo
         tempo=100000000;
     }
     if(p==3){
-        tempo=200000000;
+        tempo=100000000;
     }
     if(p==4){
-        tempo=105000000;
+        tempo=100000000;
     }
     printf("%s\n",del);
     printf("-------------------------------\n");
@@ -70,7 +70,6 @@ void linha(int t){//exibir determinada formatação de linha
     if(t==3) printf("----------------------------\n");
     if(t==4) printf("\n----------------------------\n");
     if(t==5) printf("\n+++++++++++++++++++++++++++++\n");
-
 }
 void pros(){//interromper continuação de determinado processo até que seja informado
     printf("\nContinuar[Enter]= ");
@@ -97,20 +96,8 @@ void info_geral(){
 #define mtdc 500//capacida de armazenameto de descricao tarefa
 /***********************************************************************************/
 /***********************************************************************************/
-/*
-Defeitos:
-relacao de especies
-dempenho
-exibir relatorios
-relatorio de produção %f
-exibir relatorios arquivos
-escluir especie
-*/
 /**FUNCAO PRINCIPAL**/
 int main(){
-    //acessar_bd_Arquivo('x');
-    //gerar_relatorioenxame("teste");
-    getuser_status();
     //dependencia
     acessar_bd_usuario();
     //Variaveis
@@ -120,6 +107,15 @@ int main(){
     int escl=0;
 //////////////////////////////////////////////////////////////////////////////////////
 /////Primeiro bloco/////
+printf("=======================================================================");
+printf("\n####    #### ####### ##     ##     ## ######### #########      \\/   ");
+printf("\n## ##  ## ## ##      ##     ##     ## ######### #########      00    ");
+printf("\n##  ###   ## ####### ##     ##     ## ##     ## ##     ##  ====##====");
+printf("\n##        ## ####### ##     ##     ## ######### ##     ##  ====##====");
+printf("\n##        ## ##      ##     ##     ## ##        #########      ##    ");
+printf("\n##        ## ####### ###### ###### ## ##        #########  ----------");
+printf("\n===================================================================\n");
+delay("iniciando...",2);
 //primeiro menu inicio do programa
    do{
         painel();
@@ -160,8 +156,8 @@ int main(){
             break;
             //cadastro
             case 2:
-                printf("Esse programa suporta somente um usuario por vez\nse caso ja tenha um cadastro todos os dados anteriores serao apagados!\
-            Deseja continuar?\
+                printf("Esse programa suporta somente um usuario por vez\n se caso ja tenha um cadastro todos os dados anteriores\
+            \nserao apagados! Deseja continuar?\
             \n1-sim\
             \n2-nao\n=");
                 scanf("%d",&escl);
@@ -181,8 +177,10 @@ int main(){
                     to_String();
                     linha(4);
                 }else{
+                    linha(1);
                     escl=0;
                 }
+
             break;
             //Sair
             case 3:
@@ -199,9 +197,9 @@ int main(){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /////Segundo bloco/////
+getuser_status();
     //menu principal
     if(getuser_logado()==true){//verifica se o usuário esta logado
-        //acessar_bd_Arquivo();
         acessar_bd_especies();
         acessar_bd_enxames();
         acessar_bd_tarefa();
@@ -292,7 +290,7 @@ void menuperfil(){
         printf("\n********|  PERFIL  |********");
         linha(2);
         printf("\nO QUE DESEJA FAZER?!");
-        printf("\n1-Exibir informaçoes\
+        printf("\n1-Exibir meus dados\
         \n2-Alterar login\
         \n3-Excluir conta\
         \n4-Sair\n=");
@@ -386,7 +384,7 @@ void menuperfil(){
                 scanf("%s",&opx);
                 linha(3);
                 if(opx=='s'){
-                    delay("removendo conta...",5);
+                    delay("removendo conta...",4);
                     excluir_conta();
                     printf("\nOperacao concluida...\nConta excluida com sucesso!");
                 }else{
@@ -424,7 +422,7 @@ void menuenxames(){
         printf("\nO QUE DESEJA FAZER?!");
         printf("\n1-Cadastrar enxame\
         \n2-Alterar informacoes\
-        \n3-Exibir informacoes\
+        \n3-Exibir enxame\
         \n4-Excluir enxame\
         \n5-Relacao de enxames\
         \n6-Sair\n=");
@@ -476,7 +474,7 @@ void menuenxames(){
                         //especie
                         do{
                             printf("\nDigite uma opcao para a especie do enxame![0 para ausencia]\n");
-                            for(int i=0;i<=armaz_especie;i++){
+                            for(int i=0;i<armaz_especie;i++){
                                 exibir_especie(i);
                             }
                             printf("\n=");
@@ -622,7 +620,6 @@ void menuenxames(){
                         }
                         if(esc==1|esc==2|esc==3|esc==4|esc==5){
                             atualizar_bd_enxames();
-                            printf("\nmenu enxames alteracao\n");
                         }
                         linha(2);
                     }while(esc!=6);
@@ -657,6 +654,7 @@ void menuenxames(){
                 linha(5);
                 printf("##|  Excluir enxame  |##");
                 linha(5);
+                acessar_bd_enxames();
                 printf("Digite o codigo do enxame que deseja excluir\n=");
                 setbuf(stdin,NULL);
                 scanf("%d",&codigo);
@@ -671,6 +669,7 @@ void menuenxames(){
                     linha(3);
                     if(esc==1){
                         excluir_enxame(posicao);
+                        //atualizar_bd_enxames();
                         atualizar_producaoTot();
                         atualizar_Especies();
                         delay("excluindo informacoes...",2);
@@ -744,16 +743,21 @@ void menuespecies(){
                     setbuf(stdin,NULL);
                     scanf("%d",&codigo);
                     linha(3);
-                    printf("Digite nome da especie!\n=");
-                    setbuf(stdin,NULL);
-                    gets(especie);
-                    linha(3);
-                    printf("Digite a descricao da especie!\n=");
-                    setbuf(stdin,NULL);
-                    gets(informacao);
-                    linha(1);
-                    cad_especie(codigo,especie,informacao);
-                    printf("\nEspecie cadastrada com sucesso!");
+
+                    if(verificar_cod_esp(codigo)!=1){
+                        printf("Digite nome da especie!\n=");
+                        setbuf(stdin,NULL);
+                        gets(especie);
+                        linha(3);
+                        printf("Digite a descricao da especie!\n=");
+                        setbuf(stdin,NULL);
+                        gets(informacao);
+                        linha(1);
+                        cad_especie(codigo,especie,informacao);
+                        printf("\nEspecie cadastrada com sucesso!");
+                    }else{
+                        printf("*Codigo invalido já está cadastrado\nTente novamente!");
+                    }
                     pros();
                 }else{
                     printf("=>Espaço para cadastro atingiu o limite");
@@ -878,7 +882,6 @@ void menutarefas(){
                 linha(5);
                 linha(1);
                 if(tot_taref()>0){
-                    acessar_bd_tarefa();
                     exibir_tarefas();
                     linha(2);
                 }else{
@@ -891,7 +894,6 @@ void menutarefas(){
                 linha(5);
                 printf("##|  Excluir tarefas  |##");
                 linha(5);
-                acessar_bd_tarefa();
                 exibir_tarefas();
                 if(tot_taref()>0){
                     printf("\nDigite uma opcao!\n=");
@@ -903,6 +905,7 @@ void menutarefas(){
                         printf("=>Codigo invalido!");
                     }else{
                         excluir_tarefa(pt);
+                        atualizar_bd_tarefas();
                         printf("*Tarefa foi excluida com sucesso!");
                     }
                 }else{
@@ -914,7 +917,7 @@ void menutarefas(){
             //sair
             case 4:
             break;
-
+            //erro
             default:
                 printf("\n=>Opcao invalida tente novamente!");
             break;
@@ -926,7 +929,7 @@ void menutarefas(){
 
 /////producao/////
 void menuproducao(){
-    int codigo,status,especie;
+    int codigo=0,status=0,especie=0;
     char data[21],descricao[301],especi_e[21];
     int op=0,qtd=0,posicao=0,resp=0,esc=0;
     float mel=0;
@@ -953,40 +956,43 @@ void menuproducao(){
                 linha(5);
                 printf("##|  Adicionar a produção  |##");
                 linha(5);
+                acessar_bd_enxames();
                 printf("De quantos enxames você deseja informar?\n=");
                 setbuf(stdin,NULL);
                 scanf("%d",&qtd);
                 linha(3);
                 if(get_total_enxame()>=qtd){
                     for(int i=1;i<=qtd;i++){
-                        do{
+                       do{
                             linha(1);
                             printf("\nDigite o codigo do enxame\n=");
                             setbuf(stdin,NULL);
-                            scanf("%d",&codigo);
+                            scanf("%i",&codigo);
                             resp=verificar_cod(codigo);
+                            printf("resp=",resp);
                             if(resp==1){
                                 posicao=posicao_enxame(codigo);
                                 printf("Informe a quantidade de mel retirada em ml!\n=");
                                 setbuf(stdin,NULL);
                                 scanf("%f",&mel);
                                 add_prod_enxame(mel,posicao);
-                                atualizar_bd_enxames();
-                                atualizar_Especies();
-                                atualizar_bd_especies();
-                                atualizar_producaoTot();
                                 printf("*Operacao concluida foi adicionado %2.f ml a producao\n",mel);
                             }else{
                                 printf("=>Codigo invalido!\n");
                             }
-
-                        }while(resp!=1);
+                            codigo=0;
+                            mel=0.0;
+                       }while(resp!=1);
                     }
+                    atualizar_Especies();
+                    atualizar_bd_especies();
+                    atualizar_producaoTot();
                 }else{
                     printf("*Esse numero ultrapassa o total de enxames cadastrados\
                     \nou nao foi cadastrado nenhum enxame tente novamente!\n");
                 }
                 linha(1);
+                atualizar_bd_enxames();
             break;
             //Visualizar produção
             case 2:
@@ -1011,6 +1017,7 @@ void menuproducao(){
                 linha(5);
                 printf("##|  Desempenho de enxames  |##");
                 linha(5);
+                acessar_bd_enxames();
                 if(get_total_enxame()>0){
                     printf("Digite a media de producao por enxame\n=");
                     setbuf(stdin,NULL);
@@ -1018,7 +1025,6 @@ void menuproducao(){
                     linha(3);
                     delay("exibindo...",2);
                     linha(4);
-                    printf("\n%2.f\n",mel);
                     desempenho_enxame(mel);
                 }else{
                     printf("*Não ha enxames!");
@@ -1096,8 +1102,8 @@ void menurelatorios(){
         linha(2);
         printf("\nO QUE DESEJA FAZER?!");
         printf("\n1-Gerar relatorio\
-        \n2-Exibir um relatorio\
-        \n3-Excluir um relatorio\
+        \n2-Exibir relatorio\
+        \n3-Excluir relatorio\
         \n4-Sair\n=");
         setbuf(stdin,NULL);
         scanf("%d",&op);
@@ -1109,7 +1115,7 @@ void menurelatorios(){
             //gerar relatorios
             case 1:
                 linha(5);
-                printf("##|  Gerar relatorios  |##");
+                printf("##|  Gerar relatorio  |##");
                 linha(5);
                 printf("Qual tipo de relatorio voce deseja gerar!\
                 \n1-enxames\
@@ -1141,7 +1147,7 @@ void menurelatorios(){
             //exibir relatorios
             case 2:
                 linha(5);
-                printf("##| Exibir Relatorios|##");
+                printf("##| Exibir Relatorio|##");
                 linha(5);
                 printf("Qual tipo de relatorio você quer exibir!\
                 \n1-enxames\
@@ -1193,7 +1199,7 @@ void menurelatorios(){
             //excluir relatorios
             case 3:
                 linha(5);
-                printf("##|  Excluir relatorios  |##");
+                printf("##|  Excluir relatorio  |##");
                 linha(5);
                 printf("Qual tipo de relatorio!\
                 \n1-enxames\
