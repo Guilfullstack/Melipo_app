@@ -141,23 +141,23 @@ int excluir_enxame(int pex){//exclui um enxame em determinada posição
 
 }
 void desempenho_enxame(double media){//exibe o desempenho de enxames( mais produtivo menos produtivo),abaixo e acima da média
-    double maior;
-    double menor;
-    int pmaior,pmenor;
-    int idmaior,idmenor;
+    double maior=enxame[0].producao;
+    double menor=enxame[0].producao;
+    int pmaior=0,pmenor=0;
+    int idmaior=0,idmenor=0;
     //mais produtivo,menos produtivo
     for(int i=0;i<armaz_enxame;i++){
         if(enxame[i].id_enxame!=0){
-            if(maior<enxame[i].producao){
-                maior=enxame[i].producao;
-                idmaior=enxame[i].id_enxame;
-            }else{
+            if(menor>=enxame[i].producao){
                 menor=enxame[i].producao;
                 idmenor=enxame[i].id_enxame;
             }
+            if(maior<enxame[i].producao){
+                maior=enxame[i].producao;
+                idmaior=enxame[i].id_enxame;
+            }
         }
     }
-
     printf("#############|  DENSENPENHO DE ENXAMES |###############");
     printf("\n=====================================================");
     printf("\n=Enxame + produtivo|Codigo [%d] |Producao=%.2f|",idmaior,maior);
@@ -201,8 +201,8 @@ int posicao_enxame(int id){//verifica e retorna a posição de um determinado co
     }
 }
 int verificar_cod(int id){//verifica se o codigo está cadastrado
+    if(id!=0){
         for(int i=0;i<armaz_enxame;i++){
-        if(id!=0){
             if(id==enxame[i].id_enxame){
                 return 1;
             }
@@ -221,20 +221,20 @@ int limite_cadastro(){//verifica se tem espaço para cadastrar mais enxames
 
 /////ESPECIAIS/////
 void enviar_dados_enxame(char op,int pex,int pe){//envia por parametro dados de um enxame em determinada posição para variaveis em outro arquivo
-    if(op=='p')receber_dados_enxameP(enxame[pex].producao);//producao
-    if(op=='e')receber_dados_enxameE(enxame[pex].producao,pe);//especie
-    if(op=='r'){//relatorio
-        //get_total_enxame();
-        if(enxame[pex].status==true){
-            receber_dados_enxameR(enxame[pex].id_enxame,enxame[pex].data,enxame[pex].especie,enxame[pex].id_especie,enxame[pex].producao,"forte",enxame[pex].descricao);
-        }else{
-            receber_dados_enxameR(enxame[pex].id_enxame,enxame[pex].data,enxame[pex].especie,enxame[pex].id_especie,enxame[pex].producao,"fraco",enxame[pex].descricao);
+        if(op=='p')receber_dados_enxameP(enxame[pex].producao);//producao
+        if(op=='e')receber_dados_enxameE(enxame[pex].producao,pe);//especie
+        if(op=='r'){//relatorio
+            //get_total_enxame();
+            if(enxame[pex].status==true){
+                receber_dados_enxameR(enxame[pex].id_enxame,enxame[pex].data,enxame[pex].especie,enxame[pex].id_especie,enxame[pex].producao,"forte",enxame[pex].descricao);
+            }else{
+                receber_dados_enxameR(enxame[pex].id_enxame,enxame[pex].data,enxame[pex].especie,enxame[pex].id_especie,enxame[pex].producao,"fraco",enxame[pex].descricao);
+            }
         }
-    }
-    if(op=='b'){//banco de dados
-        get_total_enxame();
-        receber_dados_enxameBD(enxame[pex].id_enxame,enxame[pex].data,enxame[pex].especie,enxame[pex].id_especie,enxame[pex].producao,enxame[pex].status,enxame[pex].descricao);
-    }
+        if(op=='b'){//banco de dados
+            get_total_enxame();
+            receber_dados_enxameBD(enxame[pex].id_enxame,enxame[pex].data,enxame[pex].especie,enxame[pex].id_especie,enxame[pex].producao,enxame[pex].status,enxame[pex].descricao);
+        }
 }
 void receber_dados_especieEx(int id_espc,char especie[21],int pex){//Recebe por parametro dados de uma especie e adiciona a um enxame em determinada posição
     strcpy(enxame[pex].especie,especie);
