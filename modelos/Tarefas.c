@@ -37,7 +37,11 @@ void criar_tarefa(char descricao[tdc]){//Cria uma nova tarefa e envia para o BD 
 }
 void exibir_tarefas(){//Exibe as tarefas criadas
     for(int i=0;i<nt;i++){
-        if(tat[i].descricao[0]!=NULL){
+        excluir_tarefa(i);
+    }
+    acessar_bd_tarefa();
+    for(int i=0;i<nt;i++){
+        if(tat[i].cod!=0&&tat[i].descricao[0]!=NULL){
             printf("\n|[%d]Tarefa|: %s",tat[i].cod,tat[i].descricao);
             printf("\n---------------------------------------------");
         }
@@ -48,7 +52,6 @@ void excluir_tarefa(int p){//Exclui uma tarefa em determinada posicao
     tat[p].descricao[1]=NULL;
     tat[p].descricao[2]=NULL;
     tat[p].cod=0;
-    atualizar_bd_tarefas();
 }
 
 /////SECUNDARIAS/////
