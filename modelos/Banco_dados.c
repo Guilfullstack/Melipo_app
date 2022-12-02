@@ -130,7 +130,7 @@ void inserir_bd_enxames(int id,char data[21],char especie[21],double producao,_B
         exit(1);
     }else{
         //enxames
-        fprintf(fpenx,"\n%s\n|ID: %d  |DAT: %s  |ESPECIE: %s \n",lin2,id,data,especie);
+        fprintf(fpenx,"%s\n|ID: %d  |DAT: %s  |ESPECIE: %s \n",lin2,id,data,especie);
         fprintf(fpenx,"|PRODUCAO: %.2f  |STATUS: %d  |ID_ESPECIE: %d \n|DESCRICAO: %s\n%s",producao,sts,id_especie,descricao,lin2);
         fflush(fpenx);
         fclose(fpenx);
@@ -191,12 +191,15 @@ void acessar_bd_enxames(){//acessa dados de todas as tarefas no BD de arquivo e 
             fscanf(fpenx,"\n%s\n%s %d  %s %s %s %s",&lin2,&texto1,&id_ex,&texto2,&dat_ex,&texto3,&espec_ex);
             fscanf(fpenx,"\n%s %f  %s %d  %s %d",&texto1,&pro_ex,&texto2,&status_ex,&texto3,&id_espec_ex);
             fscanf(fpenx,"\n%s  %s \n%s",&texto1,&descric_ex,&lin2);
-            for(int i=0;i<strlen(descric_ex);i++){
-                if(descric_ex[i]=='_'){
-                    descric_ex[i]=' ';
+            for(int l=0;l<strlen(descric_ex);l++){
+                if(descric_ex[l]=='_'){
+                    descric_ex[l]=' ';
                 }
             }
-            receber_bd_enxames(i,id_ex,dat_ex,espec_ex,id_espec_ex,pro_ex,status_ex,descric_ex);
+            if(id_ex!=0){
+                receber_bd_enxames(i,id_ex,dat_ex,espec_ex,id_espec_ex,pro_ex,status_ex,descric_ex);
+            }
+            id_ex=0;
         }
         fclose(fpenx);
     }
@@ -424,9 +427,10 @@ void acessar_bd_tarefa(){//acessa dados de todas as tarefas no BD de arquivo e e
                     tarefa[i]=' ';
                 }
             }
-            if(tarefa[0]!=NULL){
-                receber_bd_tarefa(i,i+1,tarefa);
-            }
+            //if(tarefa[0]!=NULL){
+            receber_bd_tarefa(i,i+1,tarefa);
+            //}
+            tarefa[0]=NULL;
         }
         fclose(fptat);
     }
