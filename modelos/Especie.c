@@ -160,7 +160,7 @@ com faixas amarelas onduladas no abdome.");
 atualizar_bd_especies();
 }
 void exibir_especie(int pe){//exibe as opçoes de especie
-    if(especie[pe].id_especie!=0){
+    if(especie[pe].id_especie!=0&&especie[pe].nome[0]!=NULL){
         printf("\n[%d]-%s",especie[pe].id_especie,especie[pe].nome);
     }
 }
@@ -198,10 +198,7 @@ void cad_especie(int cod,char nome[21],char informacao[tif]){//Cadastra uma nova
                 salvar_dados_especie(i);
                 info_especie(i);
                 break;
-                //return 1;
             }
-        }else{
-           // return 0;
         }
     }
 }
